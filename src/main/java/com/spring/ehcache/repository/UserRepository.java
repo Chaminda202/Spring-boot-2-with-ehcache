@@ -9,4 +9,5 @@ import com.spring.ehcache.model.User;
 public interface UserRepository extends JpaRepository<User, Integer>{
 	Optional<User> findByName(String name);
 	Optional<User> findByOccupation(String name);
+	Optional<User> findByNameAndOccupation(String name, String occupation);
 }

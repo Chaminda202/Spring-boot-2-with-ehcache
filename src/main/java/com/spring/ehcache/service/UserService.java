@@ -14,4 +14,5 @@ public interface UserService {
 	List<UserResponse> getAll();
 	UserResponse getById(Integer userId) throws ApplicationException;
 	void delete(Integer userId) throws ApplicationException;
+	UserResponse getByNameAndOccupation(String name, String occupation) throws ApplicationException;
 }

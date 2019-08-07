@@ -22,6 +22,9 @@ public class AppErrorConfig {
 	@Value("${error.by-id}")
 	private String byId;
 	
+	@Value("${error.by-name-occu}")
+	private String byNameOccu;
+	
 	@Value("${error.all}")
 	private String all;
 

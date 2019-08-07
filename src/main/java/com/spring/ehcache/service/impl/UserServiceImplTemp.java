@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.cache.annotation.CacheResult;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,21 +26,20 @@ import com.spring.ehcache.response.UserPaginResponse;
 import com.spring.ehcache.response.UserResponse;
 import com.spring.ehcache.service.UserService;
 
-@Service
-@Transactional(propagation = Propagation.REQUIRES_NEW)
-public class UserServiceImpl implements UserService {
+//@Service
+//@Transactional(propagation = Propagation.REQUIRES_NEW)
+public class UserServiceImplTemp implements UserService {
 	private Logger logger;
 	private UserRepository userRepository;
 	private AppErrorConfig appErrorConfig;
 	
-	public UserServiceImpl(UserRepository userRepository, AppErrorConfig appErrorConfig){
+	public UserServiceImplTemp(UserRepository userRepository, AppErrorConfig appErrorConfig){
 		this.logger = LoggerFactory.getLogger(this.getClass());
 		this.userRepository = userRepository;
 		this.appErrorConfig = appErrorConfig;
 	}
 	
 	@Override
-	@CachePut(cacheNames = "userAll")
 	public UserResponse save(UserRequest request) throws ApplicationException {
 		logger.info("Start service save {}", GsonUtil.getToString(request, UserRequest.class));
 		User createUser = new User();
@@ -48,7 +48,6 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	@CachePut(cacheNames = {"userAll", "userById"}, key = "#result.id")
 	public UserResponse update(UserRequest request, Integer id) throws ApplicationException {
 		Optional<User> userOptional = this.userRepository.findById(id);
 		if (userOptional.isPresent()) {
@@ -73,7 +72,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	@Cacheable(cacheNames="userAll")
+	// @CacheResult( cacheName = "userAll")
+	@Cacheable(value="userAll")
 	public List<UserResponse> getAll() {
 		List<UserResponse> responseList = new ArrayList<>();
 		List<User> data = this.userRepository.findAll();
@@ -82,7 +82,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	@Cacheable(cacheNames="userById", key="#userId", condition = "#userId > 1")
+	// @CacheResult( cacheName = "userById", key="#userId")
+	@Cacheable(value="userById")
 	public UserResponse getById(Integer userId) throws ApplicationException {
 		Optional<User> userOptional = this.userRepository.findById(userId);
 		if (userOptional.isPresent()) {
@@ -97,16 +98,6 @@ public class UserServiceImpl implements UserService {
 		if (userOptional.isPresent()) {
 			this.userRepository.delete(userOptional.get());
 			return;
-		}
-		throw new ApplicationException(this.appErrorConfig.getNotExist());
-	}
-	
-	@Override
-	@Cacheable(cacheNames="userByNameOccu", keyGenerator = "multiplyKeyGenerator")
-	public UserResponse getByNameAndOccupation(String name, String occupation) throws ApplicationException {
-		Optional<User> userOptional = this.userRepository.findByNameAndOccupation(name, occupation);
-		if (userOptional.isPresent()) {
-			return buildResponse(userOptional.get());
 		}
 		throw new ApplicationException(this.appErrorConfig.getNotExist());
 	}
@@ -127,5 +118,11 @@ public class UserServiceImpl implements UserService {
 				.age(user.getAge())
 				.salary(user.getSalary())
 				.build();
+	}
+
+	@Override
+	public UserResponse getByNameAndOccupation(String name, String occupation) throws ApplicationException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

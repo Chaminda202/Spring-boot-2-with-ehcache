@@ -78,13 +78,16 @@ public class UserController {
 	@ApiOperation(value = "View a list of users")
 	@GetMapping
 	public Map<String, Object> getAll() {
+		logger.info("Starts get users list");
 		Map<String, Object> response = new HashMap<>();
 		try {
 			response.put(CommonConstantValue.STATUS, true);
 			response.put(CommonConstantValue.DATA, this.userService.getAll());
+			logger.info("Get users list {}", CommonConstantValue.STATUS_SUCCESS);
 		} catch (Exception e) {
 			response.put(CommonConstantValue.STATUS, false);
 			response.put(CommonConstantValue.MESSAGE, this.appErrorConfig.getAll());
+			logger.error("Get users list {} -> {}", CommonConstantValue.STATUS_FAILED, e.getMessage());
 		}
 		return response;
 	}
@@ -93,11 +96,12 @@ public class UserController {
 	@GetMapping(value = "/{id}")
 	public Map<String, Object> getOne(
 			@ApiParam(required = true, name = "id", value = "Id cannot be missing or empty") @PathVariable Integer id) {
+		logger.info("Starts get user by id {}", id);
 		Map<String, Object> response = new HashMap<>();
 		try {
 			response.put(CommonConstantValue.STATUS, true);
 			response.put(CommonConstantValue.DATA, this.userService.getById(id));
-			logger.error("Get user by id {} -> {}",id, CommonConstantValue.STATUS_SUCCESS);
+			logger.info("Get user by id {} -> {}",id, CommonConstantValue.STATUS_SUCCESS);
 		} catch (ApplicationException e) {
 			response.put(CommonConstantValue.STATUS, false);
 			response.put(CommonConstantValue.MESSAGE, e.getMessage());
@@ -106,6 +110,29 @@ public class UserController {
 			response.put(CommonConstantValue.STATUS, false);
 			response.put(CommonConstantValue.MESSAGE, this.appErrorConfig.getById());
 			logger.error("Get user by id {} -> {} -> {}",id, CommonConstantValue.STATUS_FAILED, e.getMessage());
+		}
+		return response;
+	}
+	
+	@ApiOperation(value = "Get a user by name and occupation")
+	@GetMapping(value = "/nameAndOccupation")
+	public Map<String, Object> getNameAndOccupation(
+			@ApiParam(required = true, name = "name", value = "Name cannot be missing or empty") @RequestParam("name") String name,
+			@ApiParam(required = true, name = "occupation", value = "Occupation cannot be missing or empty") @RequestParam("occupation") String occupation) {
+		logger.info("Starts get user by name & occupation {} -> {}", name, occupation);
+		Map<String, Object> response = new HashMap<>();
+		try {
+			response.put(CommonConstantValue.STATUS, true);
+			response.put(CommonConstantValue.DATA, this.userService.getByNameAndOccupation(name, occupation));
+			logger.info("Get user by name & occupation {} -> {}",name, CommonConstantValue.STATUS_SUCCESS);
+		} catch (ApplicationException e) {
+			response.put(CommonConstantValue.STATUS, false);
+			response.put(CommonConstantValue.MESSAGE, e.getMessage());
+			logger.error("Get user by id {} -> {} -> {}", name, CommonConstantValue.STATUS_FAILED, e.getMessage());
+		} catch (Exception e) {
+			response.put(CommonConstantValue.STATUS, false);
+			response.put(CommonConstantValue.MESSAGE, this.appErrorConfig.getByNameOccu());
+			logger.error("Get user by id {} -> {} -> {}",name, CommonConstantValue.STATUS_FAILED, e.getMessage());
 		}
 		return response;
 	}
