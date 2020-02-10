@@ -18,7 +18,6 @@ public class SwaggerConfig {
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
-                .groupName("Spring Ehcache Service")
                 .useDefaultResponseMessages(false)
                 .apiInfo(apiInfo()).select()
                 .apis(RequestHandlerSelectors

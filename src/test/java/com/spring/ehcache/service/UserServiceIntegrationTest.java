@@ -1,10 +1,12 @@
 package com.spring.ehcache.service;
 
+/*
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigDecimal;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -42,16 +44,16 @@ public class UserServiceIntegrationTest {
 		assertEquals(new BigDecimal(245.56), response.getSalary());
 	}
 
+	@Disabled
 	@Test
-
 	@Order(2)
 	public void testGetUser_whenIdNotExist() throws ApplicationException {
 		Throwable exception = assertThrows(ApplicationException.class, () -> this.userService.getById(123));
 		assertEquals(exception.getMessage(), this.appErrorConfig.getNotExist());
 	}
 
+    @Disabled
 	@Test
-
 	@Order(3)
 	public void testGetUser_whenIdExist() throws ApplicationException {
 		UserResponse response = this.userService.getById(1);
@@ -63,3 +65,4 @@ public class UserServiceIntegrationTest {
 	}
 
 }
+*/

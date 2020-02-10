@@ -60,14 +60,14 @@ public class UserController {
 	}
 
 	@ApiOperation(value = "View a list of users with pagination")
-	@GetMapping(value = "/allWtPagin")
-	public Map<String, Object> getAllWithPagin(
+	@GetMapping(value = "/paging")
+	public Map<String, Object> getAllWithPaging(
 			@ApiParam(required = true, name = "page", value = "Page cannot be missing or empty") @RequestParam("page") int page,
 			@ApiParam(required = true, name = "size", value = "Size cannot be missing or empty") @RequestParam("size") int size) {
 		Map<String, Object> response = new HashMap<>();
 		try {
 			response.put(CommonConstantValue.STATUS, true);
-			response.put(CommonConstantValue.DATA, this.userService.getAllWithPagin(page, size));
+			response.put(CommonConstantValue.DATA, this.userService.getAllWithPaging(page, size));
 		} catch (Exception e) {
 			response.put(CommonConstantValue.STATUS, false);
 			response.put(CommonConstantValue.MESSAGE, this.appErrorConfig.getAll());
