@@ -1,0 +1,32 @@
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="ehcache.xsd"
+         updateCheck="false"
+         monitoring="autodetect"
+         dynamicConfig="true">
+    <!-- By default, Ehcache stored the cached files in temp folder. -->
+    <!-- <diskStore path="java.io.tmpdir" /> -->
+
+    <!-- Ehcache to store cache in this path -->
+    <diskStore path="C:\\Spring_Boot_Try_out\\TDD\spring_caching\\" />
+
+    <!-- Sample cache named cache1
+    This cache contains a maximum in memory of 5 elements, and will expire
+    an element if it is idle for more than 5 minutes and lives for more than
+    10 minutes.
+
+    If there are more than 5 elements it will overflow to the
+    disk cache, which in this configuration will go to place where is
+    defined on system.
+    -->
+    <cache name="users"
+           maxEntriesLocalHeap="5"
+           maxEntriesLocalDisk="10"
+           eternal="false"
+           diskSpoolBufferSizeMB="20"
+           timeToIdleSeconds="300"
+           timeToLiveSeconds="600"
+           memoryStoreEvictionPolicy="LFU"
+           transactionalMode="off">
+        <persistence strategy="localTempSwap" /> // when restart the application storage is cleared
+    </cache>
+</ehcache>
